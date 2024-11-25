@@ -31,7 +31,7 @@ We crafted a detailed prompt designed to elicit smart home routines that directl
   
 **2.	Generative AI Utilization:**
    
-Generative AI models were used to produce routines in a structured JSON format containing:
+State-of-the-art generative AI models were used to produce routines in a structured JSON format containing:
 +	Situation: A natural language description of the context, including the time and specific details.
 +	Routine: A concise description of device actions adhering to the predefined rules.
 
