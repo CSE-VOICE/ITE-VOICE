@@ -18,155 +18,159 @@ In the initial phase, we developed a generative AI model fine-tuned to deliver o
 In the second phase, our service extends from text-based interaction to voice-based commands using SKT NUGU. By integrating speech recognition, the system will process verbal requests while capturing extra verbal details such as emotional tone, urgency, and the speed of speech using IBM Watson API. These voice-derived textual and nuanced details will then be combined to enhance the model’s ability to generate more contextually optimized smart home routine recommendations, further tailoring responses to the user’s specific circumstances. Furthermore, our service keeps track of users’ conversation so that it can capture context, keywords and extra information like urgency and provide optimal smart home routine.
 
 ## Datasets
+
 Our dataset comprises approximately 10,000 unique smart home routine recommendations, generated using state-of-the-art generative AI models, including ChatGPT, Microsoft Copilot, Google Bard, and Claude. The aim was to create a comprehensive and diverse dataset of routines that cater to a wide range of situations, from common daily scenarios to highly creative and unexpected contexts.
 
 ### Dataset Generation Process
 
-**1.	Prompt Design:**
-   
-We crafted a detailed prompt designed to elicit smart home routines that directly control appliances, avoiding actions requiring human intervention. This ensured that the dataset aligns with practical use cases for smart home automation. The prompt included:
-+ A predefined list of smart home devices and their actionable settings.
-+ Explicit guidelines for valid and invalid routines.
-+	Examples of diverse scenarios to encourage variety and creativity.
-  
-**2.	Generative AI Utilization:**
-   
-State-of-the-art generative AI models were used to produce routines in a structured JSON format containing:
-+	Situation: A natural language description of the context, including the time and specific details.
-+	Routine: A concise description of device actions adhering to the predefined rules.
+**1. Prompt Design:**
 
-**3.	Deduplication:**
-   
+We crafted a detailed prompt designed to elicit smart home routines that directly control appliances, avoiding actions requiring human intervention. This ensured that the dataset aligns with practical use cases for smart home automation. The prompt included:
+
+- A predefined list of smart home devices and their actionable settings.
+- Explicit guidelines for valid and invalid routines.
+- Examples of diverse scenarios to encourage variety and creativity.
+
+**2. Generative AI Utilization:**
+
+State-of-the-art generative AI models were used to produce routines in a structured JSON format containing:
+
+- **Situation**: A natural language description of the context, including the time and specific details.
+- **Routine**: A concise description of device actions adhering to the predefined rules.
+
+**3. Deduplication:**
+
 To ensure the uniqueness of the dataset, we implemented a deduplication process to remove identical situations and their corresponding routines. This step helped maintain variety while preventing redundancy.
 
-**4.	Quality Assurance:**
- 
-The generated routines were filtered and reviewed to ensure compliance with the following criteria:
-+	Practical and actionable by smart home devices.
-+	Free from human-performed actions (e.g., “hang laundry”).
-+	Well-aligned with the context described in the situation.
+**4. Quality Assurance:**
 
-**5.	Data Export to CSV:**
+The generated routines were filtered and reviewed to ensure compliance with the following criteria:
+
+- Practical and actionable by smart home devices.
+- Free from human-performed actions (e.g., “hang laundry”).
+- Well-aligned with the context described in the situation.
+
+**5. Data Export to CSV:**
 
 Once the routines satisfied all the criteria outlined in the previous steps, they were added to a structured CSV file for easier handling and further processing. This step involved:
-+ Transforming the JSON-formatted routines into a tabular CSV structure with columns for “Situation” and “Routine.”
-+ Ensuring proper formatting and compatibility for downstream applications, such as training machine learning models or integrating with smart home systems.
-+ Storing the resulting dataset as dataset.csv, which serves as the foundation for subsequent analysis and model training.
 
-**Dataset Highlights**
+- Transforming the JSON-formatted routines into a tabular CSV structure with columns for “Situation” and “Routine.”
+- Ensuring proper formatting and compatibility for downstream applications, such as training machine learning models or integrating with smart home systems.
+- Storing the resulting dataset as `dataset.csv`, which serves as the foundation for subsequent analysis and model training.
 
-+	Diversity: The dataset covers a wide range of situations, including both mundane and imaginative contexts. Examples range from “빨래가 너무 많이 쌓였어, 세탁기 돌려야 돼.” to “집안에 벌레가 들어왔어, 조명을 이용해서 유인해보자.”
-+	Structure: Each entry consists of a situation and a corresponding routine in CSV format, enabling seamless integration into machine learning pipelines.
-+	Scalability: The methodology allows for further expansion by generating additional routines using updated prompts or new AI models.
+### Dataset Highlights
 
-Sample Entry
+- **Diversity**: The dataset covers a wide range of situations, including both mundane and imaginative contexts. Examples range from “빨래가 너무 많이 쌓였어, 세탁기 돌려야 돼.” to “집안에 벌레가 들어왔어, 조명을 이용해서 유인해보자.”
+- **Structure**: Each entry consists of a situation and a corresponding routine in CSV format, enabling seamless integration into machine learning pipelines.
+- **Scalability**: The methodology allows for further expansion by generating additional routines using updated prompts or new AI models.
+
+### Sample Entry
 
 ```
-"situation": "집에 손님이 오기 전에 분위기를 밝게 만들고 싶어.",
-"routine": "에어컨을 23도로 설정하고 조명을 밝게 조정하며 공기청정기를 켤게요."
+  "situation": "집에 손님이 오기 전에 분위기를 밝게 만들고 싶어.",
+  "routine": "에어컨을 23도로 설정하고 조명을 밝게 조정하며 공기청정기를 켤게요."
 ```
 
-Generated Dataset Statistics
+### Generated Dataset Statistics
 
-	• Total routines requested: 15,000
-	• Unique routines after deduplication: 10,000
-	• Eliminated duplicates & quality checking: Approximately 50% of initial attempts
+- **Total routines requested**: 15,000
+- **Unique routines after deduplication**: 10,000
+- **Eliminated duplicates & quality checking**: Approximately 50% of initial attempts
 
 This dataset represents a cutting-edge resource for training and fine-tuning AI systems designed to enhance smart home automation, providing realistic and user-centered automation routines tailored to a wide array of situations.
 
 ## Methodology
+
 ### 1. Data Preprocessing
 
 To ensure consistent and high-quality input for training the model, we conducted thorough preprocessing of the dataset. The primary goal was to standardize the input situation text by embedding it into a predefined template. This helped the model better understand the context and generate consistent and accurate outputs.
 
-+	Input Template Definition:
-  We defined an input template that outlined specific rules for appliance actions and included examples of both valid and invalid routines. The template     ensured that:	
-    + Only device-controllable actions were included.
-    +	Human-performed actions were excluded.
-    +	Device settings were specific and actionable.
+- **Input Template Definition**:  
+  We defined an input template that outlined specific rules for appliance actions and included examples of both valid and invalid routines. The template ensured that:  
+  - Only device-controllable actions were included.  
+  - Human-performed actions were excluded.  
+  - Device settings were specific and actionable.
 
-+	Implementation:
+- **Implementation**:  
+  Using a Python script, each situation in the dataset was transformed using the template, and the preprocessed data was saved in a new CSV file (`preprocessed_dataset.csv`).
 
-Using a Python script, each situation in the dataset was transformed using the template, and the preprocessed data was saved in a new CSV file (preprocessed_dataset.csv). 
 
 ### 2. Fine-Tuning the Model
 
 We fine-tuned a pre-trained transformer model to align it with the unique requirements of our smart home automation service.
 
-+	Model Selection:
-
-We used the **paust/pko-chat-t5-large model**, a transformer-based variant of Google Flan-T5 fine-tuned with Korean chat data, as the base model. This choice was made due to its conversational capabilities and suitability for Korean-language tasks.
-
-```
-# Load Tokenizer & Model
-tokenizer = T5TokenizerFast.from_pretrained('paust/pko-chat-t5-large')
-model = T5ForConditionalGeneration.from_pretrained('paust/pko-chat-t5-large')
-model.to(device)
-```
-
-+	Challenges and Solutions:
-    +	Large Model Size: The model, with over 800M parameters, posed computational challenges for our A10 24GB GPU. To address this, we used the PEFT-based LoRA (Low-Rank Adaptation) approach to reduce the number of trainable parameters while maintaining model performance.
-    +	Memory Optimization: The model was loaded with bfloat16 precision, reducing memory usage without significant loss in performance.
-  
-+	LoRA Configuration:
-
-We targeted specific transformer layers (query, value, key, output) for fine-tuning, significantly reducing computational overhead. The LoRA configuration was as follows:
+- **Model Selection**:  
+  We used the **paust/pko-chat-t5-large model**, a transformer-based variant of Google Flan-T5 fine-tuned with Korean chat data, as the base model. This choice was made due to its conversational capabilities and suitability for Korean-language tasks.
 
 ```
-lora_config = LoraConfig(
-    task_type=TaskType.SEQ_2_SEQ_LM,
-    r=8,
-    lora_alpha=16,
-    lora_dropout=0.1,
-    target_modules=["q", "v", "k", "o"]
-)
-model = get_peft_model(model, lora_config)
+  # Load Tokenizer & Model
+  tokenizer = T5TokenizerFast.from_pretrained('paust/pko-chat-t5-large')
+  model = T5ForConditionalGeneration.from_pretrained('paust/pko-chat-t5-large')
+  model.to(device)
+```
+
+- **Challenges and Solutions**:  
+  - **Large Model Size**: The model, with over 800M parameters, posed computational challenges for our A10 24GB GPU. To address this, we used the PEFT-based LoRA (Low-Rank Adaptation) approach to reduce the number of trainable parameters while maintaining model performance.  
+  - **Memory Optimization**: The model was optimized using bfloat16 precision, reducing memory usage without significant loss in performance.
+
+- **LoRA Configuration**:  
+  We targeted specific transformer layers (query, value, key, output) for fine-tuning, significantly reducing computational overhead. The LoRA configuration was as follows:
+
+```
+  lora_config = LoraConfig(
+      task_type=TaskType.SEQ_2_SEQ_LM,
+      r=8,
+      lora_alpha=16,
+      lora_dropout=0.1,
+      target_modules=["q", "v", "k", "o"]
+  )
+  model = get_peft_model(model, lora_config)
 ```
 
 ### 3. Training Procedure
 
 We trained the model using the preprocessed dataset in a seq2seq learning framework:
 
-+	Data Splitting: The dataset was split into training (95%) and validation (5%) sets to evaluate model performance during training.
+- **Data Splitting**:  
+  The dataset was split into training (95%) and validation (5%) sets to evaluate model performance during training.
 
-+ Hyperparameters:
-    + Optimizer: AdamW
-    +	Learning Rate: 1e-5
-    +	Batch Size: 4
-    +	Epochs: 10    
-  
-+	Checkpoints:
-    +	Checkpoints were saved every 0.5 epoch to ensure robustness against interruptions and to allow iterative evaluation.
-    +	The final model was selected based on validation performance from the saved checkpoints.
+- **Hyperparameters**:  
+  - Optimizer: AdamW  
+  - Learning Rate: 1e-5  
+  - Batch Size: 4  
+  - Epochs: 10  
 
-```
-# save checkpoint for every 0.5 epoch
-if total_steps % int(len(train_dataset) / (batch_size * 2)) == 0:
-    checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_{total_steps}")
-    model.save_pretrained(checkpoint_path)
-```
-
-+	Training Process:
-
-Each batch was fed into the model, and loss values were calculated. Gradients were backpropagated to update trainable parameters, while validation loss was computed at the end of each epoch.
+- **Checkpoints**:  
+  - Checkpoints were saved every 0.5 epoch to ensure robustness against interruptions and to allow iterative evaluation.  
+  - The final model was selected based on validation performance from the saved checkpoints.
 
 ```
-for epoch in range(num_epochs):
-    model.train()
-    for batch in train_loader:
-        outputs = model(input_ids=batch['input_ids'].to(device), labels=batch['labels'].to(device))
-        loss = outputs.loss
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+  # save checkpoint for every 0.5 epoch
+  if total_steps % int(len(train_dataset) / (batch_size * 2)) == 0:
+      checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_{total_steps}")
+      model.save_pretrained(checkpoint_path)
+```
+
+- **Training Process**:  
+  Each batch was fed into the model, and loss values were calculated. Gradients were backpropagated to update trainable parameters, while validation loss was computed at the end of each epoch.
+
+```
+  for epoch in range(num_epochs):
+      model.train()
+      for batch in train_loader:
+          outputs = model(input_ids=batch['input_ids'].to(device), labels=batch['labels'].to(device))
+          loss = outputs.loss
+          optimizer.zero_grad()
+          loss.backward()
+          optimizer.step()
 ```
 
 ### 4. Performance Monitoring
 
 Throughout the training process:
 
-+	Training Loss: Monitored at regular intervals (every 100 steps (log_interval)) to ensure convergence.
-+	Validation Loss: Evaluated after each epoch to track generalization and avoid overfitting.
+- **Training Loss**: Monitored at regular intervals (every 100 steps (log_interval)) to ensure convergence.
+- **Validation Loss**: Evaluated after each epoch to track generalization and avoid overfitting.
 
 ```
 # Training Loss part
@@ -214,7 +218,7 @@ The model’s training process was closely monitored through regular measurement
 | 11875 (Epoch 5 End) | 0.87          | 1.32           |
 | 14250 (Epoch 6 End) | 0.62          | 0.51           |
 | 16625 (Epoch 7 End) | 0.42          | 0.38           |
-| 19000 (Epoch 8 End) | 0.10          | 0.12           |
+| 19000 (Epoch 8 End) | 0.10          | 0.09           |
 | 21375 (Epoch 9 End) | 0.12          | 0.12           |
 | 23740 (Epoch 10 End)| 0.08          | 0.09           |
 
