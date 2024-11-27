@@ -75,7 +75,7 @@ Generated Dataset Statistics
 This dataset represents a cutting-edge resource for training and fine-tuning AI systems designed to enhance smart home automation, providing realistic and user-centered automation routines tailored to a wide array of situations.
 
 ## Methodology
-**1. Data Preprocessing**
+### 1. Data Preprocessing
 
 To ensure consistent and high-quality input for training the model, we conducted thorough preprocessing of the dataset. The primary goal was to standardize the input situation text by embedding it into a predefined template. This helped the model better understand the context and generate consistent and accurate outputs.
 
@@ -89,7 +89,7 @@ To ensure consistent and high-quality input for training the model, we conducted
 
 Using a Python script, each situation in the dataset was transformed using the template, and the preprocessed data was saved in a new CSV file (preprocessed_dataset.csv). 
 
-**2. Fine-Tuning the Model**
+### 2. Fine-Tuning the Model
 
 We fine-tuned a pre-trained transformer model to align it with the unique requirements of our smart home automation service.
 
@@ -123,7 +123,7 @@ lora_config = LoraConfig(
 model = get_peft_model(model, lora_config)
 ```
 
-**3. Training Procedure**
+### 3. Training Procedure
 
 We trained the model using the preprocessed dataset in a seq2seq learning framework:
 
@@ -161,7 +161,7 @@ for epoch in range(num_epochs):
         optimizer.step()
 ```
 
-**4. Performance Monitoring**
+### 4. Performance Monitoring
 
 Throughout the training process:
 
@@ -188,15 +188,83 @@ with torch.no_grad():
     print(f"Epoch{epoch + 1} : Validation Loss : {val_loss}")
 ```
 
-**5. Final Model Selection**
+### 5. Final Model Selection
 
 After training, the final model was selected based on its validation performance from the last checkpoint. The model was saved for deployment, capable of generating optimized routines for smart home devices based on the input situations.
 
 This methodology ensured that the resulting model was not only computationally efficient but also highly tailored to the specific requirements of the service, offering accurate and actionable routines for various scenarios.
 
 ## Evaluation & Analysis
-tbd
+### 1. Training and Validation Loss Trends
 
+The model’s training process was closely monitored through regular measurement of both training and validation losses. Training loss was logged every 100 steps (log interval), while validation loss was recorded at the end of each epoch. The observed trends are summarized in the tables below rounded up to two decimal points.
+
+**Loss Trends Summary**
+| Step/Epoch          | Training Loss | Validation Loss |
+|----------------------|---------------|-----------------|
+| 100                 | 21.03         | -               |
+| 200                 | 18.56         | -               |
+| 500                 | 13.47         | -               |
+| 1000                | 10.25         | -               |
+| 2000                | 8.93          | -               |
+| 2375 (Epoch 1 End)  | 8.00          | 9.45           |
+| 4750 (Epoch 2 End)  | 5.42          | 7.28           |
+| 7125 (Epoch 3 End)  | 3.28          | 4.96           |
+| 9500 (Epoch 4 End)  | 1.92          | 3.10           |
+| 11875 (Epoch 5 End) | 0.87          | 1.32           |
+| 14250 (Epoch 6 End) | 0.62          | 0.51           |
+| 16625 (Epoch 7 End) | 0.42          | 0.38           |
+| 19000 (Epoch 8 End) | 0.10          | 0.12           |
+| 21375 (Epoch 9 End) | 0.12          | 0.12           |
+| 23740 (Epoch 10 End)| 0.08          | 0.09           |
+
+**Key Observations:**
++ Training loss steadily decreased, reaching 8.00 by the end of epoch 1 and below 1.0 by epoch 5. By the final epoch, the training loss was as low as 0.08, indicating strong convergence.
++ Validation loss followed a similar trend, stabilizing at 0.12 from epoch 8 onwards, demonstrating effective generalization.
+
+### 2. Model Checkpoint Evaluation
+
+Checkpoints were saved every 0.5 epoch, corresponding to 2,375 steps per epoch. Outputs from all 20 checkpoints were evaluated using diverse input situations to determine the best-performing model.
+
+#### Evaluation Process
+1. **Sample Input Testing:**
+   - The same input was tested across all 20 checkpoints.
+   - Outputs were analyzed qualitatively based on relevance, contextual understanding, and practicality for smart home routines.
+2. **Selection Criteria:**
+   - Contextual Relevance: Alignment with the input situation.
+   - Practicality: Feasibility of the routine in a smart home environment.
+   - Consistency: Reduced variability in unrelated or illogical outputs.
+  
+#### Checkpoint Performance Example
+
+**Situation:** *"자다가 깼는데 다시 자고 싶은데 잠이 안 와."*
+| **Checkpoint**   | **Step** | **Output**                                                                                 | **Evaluation**                                                                                          |
+|------------------|---------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| Checkpoint_1187  | 1187    | 멍해져라                                                                                    | Irrelevant and vague.                                                                                  |
+| Checkpoint_2374  | 2374    | 로또통                                                                                     | Completely unrelated to the input.                                                                     |
+| Checkpoint_3561  | 3561    | 변기에서 온수를 받아서 라면을 끓이는데, 빨래를 넣었어요.                                        | Absurd and illogical.                                                                                  |
+| Checkpoint_4748  | 4748    | 변기에서 온수를 받아서 라면을 끓이자.                                                         | Illogical and impractical.                                                                             |
+| Checkpoint_5935  | 5935    | 걸레를 닦아내서 화장실을 깨끗하게 만들고, 수건을 정리해 수건 정리를 할게요.                               | Irrelevant and overly specific to cleaning.                                                            |
+| Checkpoint_7122  | 7122    | 공기청정기를 켜 공기 순환을 돕고 공기청정기를 작동해 쾌적한 공기를 제공할게요.                            | Reasonable, though redundant.                                                                          |
+| Checkpoint_8309  | 8309    | 로봇청소기로 청소를 시작하고, 세탁기로 빨래를 정리할게요.                                         | Acceptable, but lacks contextual relevance to the input.                                                |
+| Checkpoint_9496  | 9496    | 창문, 식기 정리 등 청소도구를 사용해 화장실 정리를 할게요.                                         | Unrelated to the input situation. Not Practical.                                                                   |
+| Checkpoint_10683 | 10683   | 세탁기를 돌려서 세탁물을 세탁하고, 세탁기 바닥을 청소할게요.                                        | Relevance improving, but still overly focused on cleaning.                                              |
+| Checkpoint_11870 | 11870   | 냉장고를 청소하고, 세탁기를 돌려 빨래를 시작할게요.                                              | Lacks direct relevance to the situation.                                                               |
+| Checkpoint_13057 | 13057   | 정수기에서 깨끗한 물을 준비해 드릴게요.                                                     | Practical, but lacks contextual alignment with the input.                                               |
+| Checkpoint_14244 | 14244   | 공기청정기를 켜고, 조명을 밝게 설정해 마음을 편안하게 유지할게요.                                    | Highly relevant, providing a practical and context-sensitive routine.                                   |
+| Checkpoint_15431 | 15431   | 공기청정기로 공기 정화 후 로봇청소기로 바닥 청소할게요.                                            | Strong contextual relevance and practicality.                                                          |
+| Checkpoint_16618 | 16618   | 로봇청소기로 바닥을 청소하고, 공기청정기로 공기를 정화할게요.                                        | Balanced response with good contextual understanding.                                                   |
+| Checkpoint_17805 | 17805   | 식기세척기를 작동해 식기를 세척하고, 공기청정기를 가동해 신선한 공기를 유지할게요.                          | Practical and contextually aligned, though slightly extraneous.                                         |
+| Checkpoint_18992 | 18992   | 조명을 밝게 하고, 로봇청소기로 바닥을 청소해 먼지를 제거할게요.                                      | Practical but slightly disconnected from the input’s context.                                           |
+| Checkpoint_20179 | 20179   | 공기청정기를 작동해 실내 공기를 정화하고, 조명을 밝게 조절해 편안한 분위기를 조성할게요.                   | Relevant, with an emphasis on user comfort.                                                            |
+| Checkpoint_21366 | 21366   | 스타일러로 옷 정리 후, 공기청정기로 공기 정화할게요.                                              | Practical but unrelated to the input situation.                                                        |
+| Checkpoint_22553 | 22553   | 로봇청소기로 바닥을 청소하고, 공기청정기로 실내공기를 개선할게요.                                       | Acceptable but lacked emotional alignment with the input.                                               |
+| Checkpoint_23740 | 23740   | TV에서 음악을 들어 긴장을 풀도록 하고, 공기청정기를 가동해 상쾌한 공기를 유지할게요.                           | **Best output**, combining practicality, contextual relevance, and user comfort effectively.           |
+
+#### Final Selection
+- Checkpoint_23740 (corresponding to step 23740 and epoch 10) was chosen for deployment.
+- This checkpoint consistently produced outputs that were contextually relevant, practical, and tailored to the emotional tone of the input.
+  
 ## Related Work
 tbd
 
