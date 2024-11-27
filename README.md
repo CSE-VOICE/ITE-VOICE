@@ -266,7 +266,59 @@ Checkpoints were saved every 0.5 epoch, corresponding to 2,375 steps per epoch. 
 - This checkpoint consistently produced outputs that were contextually relevant, practical, and tailored to the emotional tone of the input.
   
 ## Related Work
-tbd
+To develop our multimodal routine recommender system, we leveraged a combination of state-of-the-art tools, libraries, and existing research to ensure efficient implementation and high-quality outcomes.
+
+### 1. Tools and Libraries
+
+- **Hugging Face Transformers**  
+  We utilized the `paust/pko-chat-t5-large` model from Hugging Face as the foundation for fine-tuning. Its optimization for Korean conversational contexts made it an ideal choice for generating natural language routines for smart home automation. Hugging Face’s tools for tokenization, training, and model deployment streamlined the process, ensuring compatibility with our dataset.
+
+- **LoRA (Low-Rank Adaptation) via PEFT**  
+  To efficiently fine-tune the large transformer model, we implemented LoRA, a Parameter-Efficient Fine-Tuning (PEFT) method. This technique focused on specific layers (`q`, `v`, `k`, `o`) of the transformer, reducing the number of trainable parameters without compromising performance.
+
+- **Speech and Emotion Analysis**  
+  - **IBM Watson API**: Used for analyzing nuanced details from voice inputs, such as emotional tone, urgency, and speech speed. These features enhanced the model’s ability to generate context-aware and emotionally aligned smart home routines.  
+  - **SKT NUGU**: Integrated for voice command recognition, enabling seamless interaction between users and the smart home system through spoken language.
+
+- **PyTorch for Model Training**  
+  PyTorch was the primary framework for implementing and training the model, with utilities like `DataLoader` and `Dataset` simplifying data management and batch processing. The `AdamW` optimizer was employed for training, offering robust performance for large-scale datasets by effectively decoupling weight decay from the optimization step.
+
+- **Data Management with pandas**  
+  `pandas` was utilized for preprocessing and managing the dataset, ensuring clean and consistent data inputs for model training.
+
+
+### 2. Existing Studies and Research
+
+- **Generative AI and Prompt Engineering**  
+  Inspired by advancements in generative AI, including ChatGPT, and Claude, our system was designed to focus specifically on actionable, context-aware outputs tailored for smart home environments. Prompt engineering techniques were applied to elicit high-quality outputs from generative AI systems during dataset creation, ensuring practical and device-actionable routines.
+
+- **Smart Home Automation Research**  
+  Commercial platforms like Google Home and Amazon Alexa informed our understanding of smart home automation’s current capabilities and limitations. Unlike these systems, our service emphasizes multimodal interaction and emotional nuance to create a more personalized user experience.
+
+
+### 3. Dataset References
+
+- **Generation Techniques**  
+  Our dataset, comprising 10,000 entries, was created using state-of-the-art generative AI tools, including ChatGPT, Google Bard, and Claude. Each entry included a user situation and a corresponding smart home routine, focusing on diversity, practicality, and contextual relevance.
+
+- **Deduplication and Quality Assurance**  
+  Techniques inspired by best practices in dataset cleaning were applied to remove duplicates and ensure the routines aligned with predefined rules. This step maintained dataset quality and enhanced its utility for model training.
+
+- **Structure and Scalability**  
+  The dataset was formatted as CSV files, enabling seamless integration with machine learning pipelines. The structured format allowed for scalability and facilitated future expansions using updated prompts or models.
+
+
+By integrating these tools, methodologies, and datasets, our project bridges the gap between user needs and advanced AI-driven automation, delivering a highly personalized and efficient smart home routine recommender system.
 
 ## Conclusion
-tbd
+### Discussion
+Our project, *VOICE: A Multimodal Routine Recommender for Any Circumstances*, demonstrates the potential of AI-driven solutions to provide personalized and context-aware smart home automation. By integrating advanced generative AI models with multimodal interaction capabilities, we successfully developed a system that delivers highly practical, actionable, and user-focused routines for diverse situations.
+
+Key highlights include:
+
+- **Innovative Use of Generative AI**: Leveraging state-of-the-art AI models like ChatGPT and paust/pko-chat-t5-large, we created a robust dataset and fine-tuned a model capable of understanding and addressing nuanced user needs.
+- **Multimodal Interaction**: Incorporating voice recognition through SKT NUGU and emotional analysis via IBM Watson API enabled us to capture richer user inputs, enhancing the model’s ability to generate contextually relevant outputs.
+- **Efficiency and Scalability**: Employing techniques like LoRA for parameter-efficient fine-tuning ensured the system was computationally efficient while maintaining high performance. The structured dataset design allows for seamless scalability and future expansion.
+
+### Closing Remarks
+This project highlights the transformative impact of combining generative AI, multimodal interactions, and smart home technologies. Through continuous innovation and user-centered design, we aim to advance smart home automation, creating systems that not only meet but anticipate user needs in a seamless and intuitive manner.
