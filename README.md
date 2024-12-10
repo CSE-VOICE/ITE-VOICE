@@ -15,7 +15,7 @@ We propose a multimodal AI service that recommends optimal smart home routines t
 
 In the initial phase, we developed a generative AI model fine-tuned to deliver optimal smart home routines based on textual descriptions of user circumstances. To train the model, we constructed a robust dataset containing approximately 10,000 examples in the format (situation: routine). The dataset was generated using state-of-the-art generative AI models like ChatGPT, MS Copilot, Google Bard, and Claude. To ensure the recommendations are robust and contextually relevant, we included diverse and even unconventional circumstances in the dataset, expanding its versatility across realistic and imaginative scenarios. Once the dataset was prepared, we fine-tuned a transformer-based model, specifically the paust-t5-chat-large, optimized for Korean conversational contexts.
 
-In the second phase, our service extends from text-based interaction to voice-based commands using SKT NUGU. By integrating speech recognition, the system will process verbal requests while capturing extra verbal details such as emotional tone, urgency, and the speed of speech using IBM Watson API. These voice-derived textual and nuanced details will then be combined to enhance the model’s ability to generate more contextually optimized smart home routine recommendations, further tailoring responses to the user’s specific circumstances. Furthermore, our service keeps track of users’ conversation so that it can capture context, keywords and extra information like urgency and provide optimal smart home routine.
+In the second phase, our service extends from text-based interaction to voice-based commands using SKT NUGU. By integrating speech recognition, the system will translate verbal request to text with Google Speech-To-Text API, while capturing extra verbal details such as emotional tone, urgency, and the speed of speech using Hume AI.  These voice-derived textual and nuanced details will then be combined to enhance the model’s ability to generate more contextually optimized smart home routine recommendations, further tailoring responses to the user’s specific circumstances. Furthermore, our service keeps track of users’ conversation so that it can capture context, keywords and extra information like urgency and provide optimal smart home routine.
 
 ## Datasets
 
@@ -280,8 +280,9 @@ To develop our multimodal routine recommender system, we leveraged a combination
 - **LoRA (Low-Rank Adaptation) via PEFT**  
   To efficiently fine-tune the large transformer model, we implemented LoRA, a Parameter-Efficient Fine-Tuning (PEFT) method. This technique focused on specific layers (`q`, `v`, `k`, `o`) of the transformer, reducing the number of trainable parameters without compromising performance.
 
-- **Speech and Emotion Analysis**  
-  - **IBM Watson API**: Used for analyzing nuanced details from voice inputs, such as emotional tone, urgency, and speech speed. These features enhanced the model’s ability to generate context-aware and emotionally aligned smart home routines.  
+- **Speech and Emotion Analysis**
+  - **GOOGLE STT**: Used for translating voice input from user to situation text, which is then combined with nuanced details
+  - **HUME AI API**: Used for analyzing nuanced details from voice inputs, such as emotional tone, urgency, and speech speed. These features enhanced the model’s ability to generate context-aware and emotionally aligned smart home routines.  
   - **SKT NUGU**: Integrated for voice command recognition, enabling seamless interaction between users and the smart home system through spoken language.
 
 - **PyTorch for Model Training**  
