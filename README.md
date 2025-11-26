@@ -102,7 +102,7 @@ We fine-tuned a pre-trained transformer model to align it with the unique requir
 - **Model Selection**:  
   We used the **paust/pko-chat-t5-large model**, a transformer-based variant of Google Flan-T5 fine-tuned with Korean chat data, as the base model. This choice was made due to its conversational capabilities and suitability for Korean-language tasks.
 
-```
+```python
   # Load Tokenizer & Model
   tokenizer = T5TokenizerFast.from_pretrained('paust/pko-chat-t5-large')
   model = T5ForConditionalGeneration.from_pretrained('paust/pko-chat-t5-large')
@@ -116,7 +116,7 @@ We fine-tuned a pre-trained transformer model to align it with the unique requir
 - **LoRA Configuration**:  
   We targeted specific transformer layers (query, value, key, output) for fine-tuning, significantly reducing computational overhead. The LoRA configuration was as follows:
 
-```
+```python
   lora_config = LoraConfig(
       task_type=TaskType.SEQ_2_SEQ_LM,
       r=8,
@@ -144,7 +144,7 @@ We trained the model using the preprocessed dataset in a seq2seq learning framew
   - Checkpoints were saved every 0.5 epoch to ensure robustness against interruptions and to allow iterative evaluation.  
   - The final model was selected based on validation performance from the saved checkpoints.
 
-```
+```python
   # save checkpoint for every 0.5 epoch
   if total_steps % int(len(train_dataset) / (batch_size * 2)) == 0:
       checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_{total_steps}")
@@ -154,7 +154,7 @@ We trained the model using the preprocessed dataset in a seq2seq learning framew
 - **Training Process**:  
   Each batch was fed into the model, and loss values were calculated. Gradients were backpropagated to update trainable parameters, while validation loss was computed at the end of each epoch.
 
-```
+```python
   for epoch in range(num_epochs):
       model.train()
       for batch in train_loader:
@@ -172,12 +172,12 @@ Throughout the training process:
 - **Training Loss**: Monitored at regular intervals (every 100 steps (log_interval)) to ensure convergence.
 - **Validation Loss**: Evaluated after each epoch to track generalization and avoid overfitting.
 
-```
+```python
 # Training Loss part
 if total_steps % log_interval == 0:
     print(f"Epoch {epoch + 1}, Step {total_steps}, Training Loss: {loss.item()}")
 ```
-```
+```python
 # Validation part
 model.eval()
 val_loss = 0
